@@ -13,9 +13,11 @@ $(SRC): $(SRC:=.asm)
 
 debug: $(SRC)
 	gdb \
-	-ex "b _start" \
 	-ex "set debuginfod enabled off" \
 	-ex "set disassembly-flavor intel" \
+	-ex "b _start" \
+	-ex "run" \
+	-ex "layout regs" \
 	--args ./$(SRC) $(A)
 
 

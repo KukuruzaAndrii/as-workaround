@@ -26,6 +26,7 @@ _start:
         add	r10, r11
         mov	rax, r10
         mov	r12, 0
+        push	10
         jmp	.int_to_str
 
         jmp	.exit
@@ -66,7 +67,7 @@ _start:
         mov	r12, 8
         mul	r12
         add	rax, 8
-        push	10
+
 
 
         mov	rdx, rax
