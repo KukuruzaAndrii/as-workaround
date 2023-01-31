@@ -26,7 +26,7 @@ _start:
         add	r10, r11
         mov	rax, r10
         mov	r12, 0
-        push	10
+        push	NL              ;add \n
         jmp	.int_to_str
 
         jmp	.exit
@@ -52,28 +52,21 @@ _start:
         mov	rbx, 10
         div	rbx
         add	rdx, ASCII_DIFF_CHAR_NUM
-;        add	rdx, 0x0
         push	rdx
-;        push	0xA
-;        push	0
         inc	r12
         cmp	rax, 0x0
         jne	.int_to_str
         jmp	.print
 
 .print:
-        mov	rax, 1
-        mul	r12
+        mov	rax, r12
+        inc	rax             ;for additional \n
         mov	r12, 8
         mul	r12
-        add	rax, 8
-
-
 
         mov	rdx, rax
         mov	rax, SYS_WRITE
         mov	rdi, STD_IN
-        ;add	rsp, 8
         mov	rsi, rsp
         syscall
         jmp	.exit
