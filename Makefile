@@ -1,5 +1,5 @@
-DIR = 3-sum-args
-FILE = sum
+DIR = 4-reverse
+FILE = reverse3
 SRC = $(DIR)/$(FILE)
 
 all: run

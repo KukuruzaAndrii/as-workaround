@@ -1,6 +1,12 @@
+*
+!*/
+!*.*
+
 *.o
 a.out
 *.lst
 
+
 # all files without ext. for bins
-[^\.]*
+
+#**/[^\.]*
