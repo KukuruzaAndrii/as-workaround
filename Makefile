@@ -1,5 +1,5 @@
-DIR = 4-reverse
-FILE = reverse3
+DIR = 5-print-args
+FILE = print-args
 SRC = $(DIR)/$(FILE)
 
 all: run
