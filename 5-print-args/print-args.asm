@@ -21,14 +21,25 @@ _start:
         ;1. dont need to save rbx, rcx, rdx
         ;2. no params
         call	.printNL
+        call	.printArgs
+        call	.exit
 
+.printArgs:
+        push	rbp
+        mov	rbp, rsp
+        mov	r10, 16
 .printArgsloop:
-        cmp	byte [rsp], 0
-        je	.exit
+        cmp	qword [rbp + r10], 0
+        je	.printArgsRet
+        push	qword [rbp + r10]
         call	.printArg
         call	.printNL
-        add	rsp, 8
+        add	r10, 8
         jmp	.printArgsloop
+.printArgsRet:
+        mov	rsp, rbp
+        pop	rbp
+        ret
 
 .printCountArgs:
         push	rbp             ;1.
@@ -36,9 +47,7 @@ _start:
         ;2. mem for local var - argc
         sub	rsp, 8
         mov	rbx, rsp        ;store addres of loc var to rbx
-        ;3. callee-saved
-        push	rdi
-        push	rsi
+        ;3. callee-saved - dont need to save rsi rdi
 	;-- actuall func
         mov	rcx, [rbp + 16]  ;argc to local
         add	rcx, 48          ;conv to char
@@ -53,9 +62,7 @@ _start:
         add	rsp, 16         ;2 params (count of chars and addres of buf)
 
         ;4. dont need return rax
-        ;5. restore call-svd
-        pop	rsi
-        pop	rdi
+        ;5. restore call-svd - dont need
         ;6. dealocate local
         mov	rsp, rbp
         ;7 restore caller rbp
@@ -67,9 +74,7 @@ _start:
         push	rbp
         mov	rbp, rsp
         ; 2. no need mem for local
-        ; 3. calle-saved
-        push	rdi
-        push	rsi
+        ; 3. calle-saved  - dont need to save rsi rdi
         ;--push args to stack
         push	1
         push	NEW_LINE
@@ -78,9 +83,7 @@ _start:
         add	rsp, 16
         
         ;4. dont need return rax
-        ;5. restore call-svd
-        pop	rsi
-        pop	rdi
+        ;5. restore call-svd - dont need
         ;6. dealocate local
         mov	rsp, rbp
         ;7 restore caller rbp
@@ -91,16 +94,15 @@ _start:
         push	rbp             ;1.
         mov	rbp, rsp
         ; 2. dont need loc var
-        ; 3. calle-saved
-        push	rdi
-        push	rsi
+        ; 3. calle-saved - dont need to save rsi rdi
         ; -- act func
         ; dont need save rbx, rcx, rdx
         ; push arg to stack
         push	qword [rbp + 16]
         ; calc str len
         call	.strlen
-
+        ; remove param
+        add	rsp, 8
         ; push args to stack
         push	rax              ;strlen
         push	qword [rbp + 16] ;argv[i]
@@ -109,9 +111,7 @@ _start:
         add	rsp, 16
 
         ;4 dont need return rax
-        ;5 restore call-saved
-        pop	rsi
-        pop	rdi
+        ;5 restore call-saved - dont need
         ;6 dont need dealoca local
         mov	rsp, rbp
         ;7
@@ -122,9 +122,7 @@ _start:
         push	rbp             ;1.
         mov	rbp, rsp
         ; 2. no need local var
-        ; 3. calle-saved
-        push	rdi
-        push	rsi
+        ; 3. calle-saved - dont need to save rsi rdi
         ;--actually func
         mov	rax, 0          ;char count
         mov	rcx, [rbp + 16] ;argv[i] to local
@@ -136,8 +134,6 @@ _start:
         jmp	.strlen.loop
 .strlen.ret:
         ;5 restore call-saved
-        pop	rsi
-        pop	rdi
         ;6 dont need dealoca local
         mov	rsp, rbp
         ;7
@@ -148,9 +144,7 @@ _start:
         push	rbp             ;1.
         mov	rbp, rsp
         ; 2. no need loc vars
-        ; 3. calle-saved
-        push	rdi
-        push	rsi
+        ; 3. calle-saved - dont need to save rsi rdi
         ;-- actually func
         mov	rax, SYS_WRITE
         mov	rdi, STD_OUT
@@ -159,8 +153,6 @@ _start:
         syscall
         ;4 dont need return rax
         ;5 restore call-saved
-        pop	rsi
-        pop	rdi
         ;6 dont need dealoca local
         mov	rsp, rbp
         ;7
