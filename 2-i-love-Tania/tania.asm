@@ -16,7 +16,15 @@ print:
         add	rbx, 1
         cmp	rbx, 1000
         jne	print
-        
+
+	push      10		;\n
+	mov	rax, 1
+        mov	rdi, 1
+        mov	rsi, rsp
+        mov	rdx, 1
+	syscall
+	
+        ; exit
         mov	rax, 60
         mov	rdi, 0
         syscall
